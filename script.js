@@ -140,7 +140,7 @@ function showQuestion() {
 function checkAnswer(answer) {
   // A wrong answer keeps the current riddle on screen so the player can try again.
   if (answer !== riddles[questionIndex].answer) {
-    prompt.dataset.message = 'we ni mjinga kumbaff !! shenzi';
+    prompt.dataset.message = 'you can never make it!';
     prompt.textContent = `${playerName}, ${prompt.dataset.message}`;
     prompt.classList.remove('answer-correct');
     prompt.classList.add('answer-wrong');
