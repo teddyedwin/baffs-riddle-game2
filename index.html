@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#10121e">
+  <meta name="description" content="Solve each riddle to unlock the next one.">
+  <title>Riddle Challenge — One More Question</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="page-shell">
+    <header class="site-header">
+      <a class="wordmark" href="#howToPlay" aria-label="How to play">
+        <span class="wordmark-icon" aria-hidden="true">?</span>
+        <span>JUST<span class="wordmark-accent">ASK</span></span>
+      </a>
+      <span class="header-note" id="headerNote"><span class="status-dot" aria-hidden="true"></span> A little question game</span>
+    </header>
+
+    <div class="how-to-play-backdrop" id="howToPlayBackdrop" hidden></div>
+    <aside class="how-to-play" id="howToPlay" aria-labelledby="howToPlayTitle" aria-hidden="true" hidden>
+      <button class="how-to-play-close" id="closeHowToPlay" type="button" aria-label="Close instructions">×</button>
+      <p class="question-label">HOW TO PLAY</p>
+      <h2 id="howToPlayTitle">Solve the riddles.</h2>
+      <p>Choose the right answer to move on. Pick the wrong one? Try again. Finish all the riddles to win.</p>
+    </aside>
+
+    <section class="question-panel login-panel" id="loginPanel" aria-labelledby="loginTitle">
+      <div class="panel-topline">
+        <span class="eyebrow"><span class="sparkle" aria-hidden="true">✳</span> READY FOR A CHALLENGE?</span>
+        <span class="answer-note">Enter your name to begin.</span>
+      </div>
+      <div class="question-content">
+        <p class="question-label">WELCOME TO THE RIDDLE CHALLENGE</p>
+        <h1 id="loginTitle">ENTER YOUR NAME</h1>
+      </div>
+      <form class="name-form" id="nameForm">
+        <label class="answer-label" for="nameInput">YOUR NAME</label>
+        <div class="name-controls">
+          <input id="nameInput" name="name" type="text" placeholder="Enter your name..." autocomplete="given-name" maxlength="40" required>
+          <button class="answer-button answer-yes" type="submit">
+            <span>Next</span><span class="button-arrow" aria-hidden="true">↗</span>
+          </button>
+        </div>
+      </form>
+      <div class="panel-footer">
+        <span class="footer-mark" aria-hidden="true">✳</span>
+        <p>Your name is only used to welcome you.</p>
+        <span class="footer-mark" aria-hidden="true">✳</span>
+      </div>
+    </section>
+
+    <section class="question-panel" id="quizPanel" aria-labelledby="question" hidden>
+      <div class="panel-topline">
+        <span class="eyebrow"><span class="sparkle" aria-hidden="true">✳</span> GO WITH YOUR GUT</span>
+        <span class="answer-note">Get it right to move on.</span>
+      </div>
+
+      <div class="question-content" aria-live="polite" aria-atomic="true">
+        <p class="question-label">HERE'S YOUR QUESTION</p>
+        <h1 id="question">What is always coming but never arrives?</h1>
+      </div>
+
+      <div class="answer-options" id="answerOptions" aria-label="Answer choices"></div>
+      <button class="answer-button answer-yes restart-button" id="restartButton" type="button" hidden>
+        <span>Play again</span><span class="button-arrow" aria-hidden="true">↗</span>
+      </button>
+
+      <div class="panel-footer">
+        <span class="footer-mark" aria-hidden="true">✳</span>
+        <p id="prompt" aria-live="polite">Solve the riddle to unlock the next question.</p>
+        <span class="footer-mark" aria-hidden="true">✳</span>
+      </div>
+    </section>
+
+    <footer class="page-footer" aria-label="Made by Baffs">
+      <div class="footer-marquee">
+        <div class="footer-marquee-track">
+          <span>MADE BY BAFFS <span aria-hidden="true">✳</span></span>
+          <span aria-hidden="true">MADE BY BAFFS <span>✳</span></span>
+        </div>
+      </div>
+    </footer>
+  </main>
+  <script src="script.js"></script>
+</body>
+</html>
