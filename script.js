@@ -11,7 +11,30 @@ const howToPlay = document.getElementById('howToPlay');
 const howToPlayBackdrop = document.getElementById('howToPlayBackdrop');
 const closeHowToPlay = document.getElementById('closeHowToPlay');
 const howToPlayLink = document.querySelector('.wordmark');
+const slideImage = document.getElementById('slideImage');
+const slideCaption = document.getElementById('slideCaption');
+const previousSlide = document.getElementById('previousSlide');
+const nextSlide = document.getElementById('nextSlide');
+const slideIndicators = [...document.querySelectorAll('.slide-indicator')];
 let playerName = '';
+
+const slides = [
+  {
+    src: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=1200&q=85',
+    alt: 'Friends enjoying time together',
+    caption: 'Ask something.'
+  },
+  {
+    src: 'https://images.unsplash.com/photo-1527529482837-4698179dc6ce?auto=format&fit=crop&w=1200&q=85',
+    alt: 'Friends celebrating together',
+    caption: 'Think together.'
+  },
+  {
+    src: 'https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=1200&q=85',
+    alt: 'Friends sharing a meal around a table',
+    caption: 'Have a laugh.'
+  }
+];
 
 const riddles = [
   { question: 'What is always coming but never arrives?', answer: 'Tomorrow', options: ['Yesterday', 'Tomorrow', 'The weekend', 'Sunrise'] },
@@ -25,6 +48,31 @@ const riddles = [
 ];
 
 let questionIndex = 0;
+let slideIndex = 0;
+
+function showSlide(index) {
+  slideIndex = (index + slides.length) % slides.length;
+  const slide = slides[slideIndex];
+  slideImage.src = slide.src;
+  slideImage.alt = slide.alt;
+  slideCaption.textContent = slide.caption;
+  slideIndicators.forEach((indicator, indicatorIndex) => {
+    const active = indicatorIndex === slideIndex;
+    indicator.classList.toggle('is-active', active);
+    if (active) {
+      indicator.setAttribute('aria-current', 'true');
+    } else {
+      indicator.removeAttribute('aria-current');
+    }
+  });
+}
+
+previousSlide.addEventListener('click', () => showSlide(slideIndex - 1));
+nextSlide.addEventListener('click', () => showSlide(slideIndex + 1));
+slideIndicators.forEach((indicator, index) => {
+  indicator.addEventListener('click', () => showSlide(index));
+});
+showSlide(0);
 
 function openHowToPlay() {
   howToPlay.hidden = false;
