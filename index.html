@@ -50,8 +50,6 @@
     <section class="photo-carousel" aria-label="Friends having fun together">
       <figure class="photo-slide">
         <img id="slideImage" src="https://thumb.wikimedia.org/wikipedia/commons/thumb/4/40/Chess_game_Staunton_No._6_perfil_view_8.jpg/1280px-Chess_game_Staunton_No._6_perfil_view_8.jpg" alt="Chess pieces set up on a board">
-        <button class="slide-arrow slide-previous" id="previousSlide" type="button" aria-label="Previous photo">‹</button>
-        <button class="slide-arrow slide-next" id="nextSlide" type="button" aria-label="Next photo">›</button>
         <div class="slide-indicators" id="slideIndicators" aria-label="Choose a photo">
           <button class="slide-indicator is-active" type="button" aria-label="Show photo 1" aria-current="true"></button>
           <button class="slide-indicator" type="button" aria-label="Show photo 2"></button>
@@ -96,6 +94,7 @@
           <button class="answer-button answer-yes login-submit" type="submit">
             <span>Log in</span><span class="button-arrow" aria-hidden="true">↗</span>
           </button>
+          <button class="reset-login-button" id="resetLoginButton" type="button" hidden>Reset saved login</button>
           <p class="login-status" id="loginStatus" aria-live="polite"></p>
       </form>
     </section>

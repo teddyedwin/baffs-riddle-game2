@@ -6,6 +6,7 @@ const nameForm = document.getElementById('nameForm');
 const nameInput = document.getElementById('nameInput');
 const passwordInput = document.getElementById('passwordInput');
 const loginStatus = document.getElementById('loginStatus');
+const resetLoginButton = document.getElementById('resetLoginButton');
 const loginPanel = document.getElementById('loginPanel');
 const quizPanel = document.getElementById('quizPanel');
 const logoutButton = document.getElementById('logoutButton');
@@ -27,8 +28,6 @@ const closeHowToPlay = document.getElementById('closeHowToPlay');
 const howToPlayLink = document.querySelector('.wordmark');
 const slideImage = document.getElementById('slideImage');
 const photoCarousel = document.querySelector('.photo-carousel');
-const previousSlide = document.getElementById('previousSlide');
-const nextSlide = document.getElementById('nextSlide');
 const slideIndicators = [...document.querySelectorAll('.slide-indicator')];
 const difficultySelect = document.getElementById('difficultySelect');
 let playerName = '';
@@ -338,15 +337,18 @@ function updateLoginInstructions() {
     if (credential) {
       passwordInput.autocomplete = 'current-password';
       passwordInput.placeholder = 'Enter your saved password';
-      loginStatus.textContent = 'Enter the password saved for this name.';
+      loginStatus.textContent = `This browser already has a login for ${credential.name}. Enter that name and its password, or reset the saved login.`;
+      resetLoginButton.hidden = false;
       return;
     }
 
     passwordInput.autocomplete = 'new-password';
     passwordInput.placeholder = 'Create a 4–8 character password';
+    resetLoginButton.hidden = true;
     loginStatus.textContent = '';
   } catch (error) {
     console.error('Could not read the saved password credential.', error);
+    resetLoginButton.hidden = true;
     loginStatus.textContent = 'Saved password data could not be read. Please check browser storage.';
   }
 }
@@ -379,6 +381,37 @@ function restorePlayerLogin() {
     headerNote.hidden = false;
   }
 }
+
+resetLoginButton.addEventListener('click', () => {
+  if (!window.confirm('Reset the saved login on this browser? Your leaderboard scores will remain.')) {
+    return;
+  }
+
+  let oldCredential;
+  let oldStoredName;
+  try {
+    oldCredential = localStorage.getItem(passwordCredentialKey);
+    oldStoredName = localStorage.getItem(playerStorageKey);
+    localStorage.removeItem(passwordCredentialKey);
+    localStorage.removeItem(playerStorageKey);
+    nameInput.value = '';
+    passwordInput.value = '';
+    updateLoginInstructions();
+    loginStatus.textContent = 'Saved login reset. Enter your name and create a new password.';
+    nameInput.focus();
+  } catch (error) {
+    console.error('Could not reset the saved login in this browser.', error);
+    try {
+      if (oldCredential === null) localStorage.removeItem(passwordCredentialKey);
+      else if (oldCredential !== undefined) localStorage.setItem(passwordCredentialKey, oldCredential);
+      if (oldStoredName === null) localStorage.removeItem(playerStorageKey);
+      else if (oldStoredName !== undefined) localStorage.setItem(playerStorageKey, oldStoredName);
+    } catch (rollbackError) {
+      console.error('Could not roll back the saved login reset.', rollbackError);
+    }
+    loginStatus.textContent = 'Could not reset the saved login. Please check browser storage.';
+  }
+});
 
 function showSlide(index) {
   slideIndex = (index + slides.length) % slides.length;
@@ -416,14 +449,6 @@ function resumeSlideshow() {
   startSlideshow();
 }
 
-previousSlide.addEventListener('click', () => {
-  showSlide(slideIndex - 1);
-  startSlideshow();
-});
-nextSlide.addEventListener('click', () => {
-  showSlide(slideIndex + 1);
-  startSlideshow();
-});
 slideIndicators.forEach((indicator, index) => {
   indicator.addEventListener('click', () => {
     showSlide(index);
@@ -496,7 +521,7 @@ nameForm.addEventListener('submit', async (event) => {
     const credential = getSavedPasswordCredential();
     if (credential) {
       if (credential.name.toLocaleLowerCase() !== enteredName.toLocaleLowerCase()) {
-        loginStatus.textContent = 'Wrong password try again.';
+        loginStatus.textContent = `This browser has a saved login for ${credential.name}. Enter that name, or reset the saved login.`;
         return;
       }
 
@@ -509,7 +534,7 @@ nameForm.addEventListener('submit', async (event) => {
       }
       const enteredHash = await hashPassword(password, salt);
       if (!passwordsMatch(enteredHash, credential.passwordHash)) {
-        loginStatus.textContent = 'Wrong password try again.';
+        loginStatus.textContent = 'That password does not match the saved login. Try again or reset the saved login.';
         return;
       }
     } else {
@@ -575,7 +600,7 @@ function showQuestion() {
 function checkAnswer(answer) {
   // A wrong answer keeps the current riddle on screen so the player can try again.
   if (answer !== currentRiddles[questionIndex].answer) {
-    prompt.dataset.message = 'you can never make it!';
+    prompt.dataset.message = 'try again';
     prompt.textContent = `${playerName}, ${prompt.dataset.message}`;
     prompt.classList.remove('answer-correct');
     prompt.classList.add('answer-wrong');
